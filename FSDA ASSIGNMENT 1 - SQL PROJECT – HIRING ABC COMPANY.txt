@@ -1,0 +1,100 @@
+--------------------------------------------------------SQL PROJECT – HIRING ABC COMPANY ---------------------------------------------------------------------------------------
+show databases;
+create database assignment;
+USE ASSIGNMENT;
+
+-------------------------------Task 1------------------------------------------------------
+
+CREATE OR REPLACE TABLE SHOPPING_HISTORY(
+   PRODUCT_NAME VARCHAR(20) NOT NULL,
+   QUANTITY INT NOT NULL,
+    UNIT_PRICE INT NOT NULL);
+    
+INSERT INTO  SHOPPING_HISTORY VALUES ('MILK',3,10),('BREAD',7,3),('BREAD',5,2);
+
+SELECT * FROM SHOPPING_HISTORY;
+
+
+---------------------- Totoal amount  of money spent on each product------------------------------------------------- 
+SELECT PRODUCT_NAME,UNIT_PRICE*QUANTITY AS TOTAL_PRICE
+FROM SHOPPING_HISTORY
+ORDER BY TOTAL_PRICE DESC,PRODUCT_NAME DESC ;
+
+
+-------------------------------------------------------------TASK 2----------------------------------------------------------------------
+
+create or replace table phones (
+    name varchar(20) not null unique,
+    phone_number int not null unique );
+    
+create or replace table calls(
+    id int not null,
+    caller int not null,
+    callee int not null,
+    duration int not null,
+    unique(id));  
+    
+insert into phones values
+('Jack',1234),('Lena',3333),('Mark',9999),('Anna',7582);
+
+insert into  calls values 
+(25,1234,7582,8),(7,9999,7582,1),
+(18,9999,3333,4),(2,7582,3333,3),
+(3,3333,1234,1),(21,3333,1234,1);
+    
+select * from phones;
+select * from calls;
+
+
+
+
+-----------------------------------------------------tasK2 -ALL CLIENT WHO  TALKED FOR AT LEAST 10 MINNUTES-----------------------------------------------------------------
+
+
+with call_duration as (
+select caller as phone_number, sum(duration) as duration from calls group by caller
+union all
+select callee as phone_number, sum(duration) as duration from calls group by callee
+)
+SELECT name
+FROM phones p join call_duration cd on cd.phone_number = p.phone_number
+GROUP BY name
+HAVING SUM(duration) >= 10
+ORDER BY name
+
+
+-------------------------------------------------------------TASK-2-----------------------------------------------
+
+
+create or replace table phones_1 (
+    name varchar(20) not null unique,
+    phone_number int not null unique );
+    
+    
+create or replace table calls_1(
+    id int not null,
+    caller int not null,
+    callee int not null,
+    duration int not null,
+    unique(id));   
+
+insert into phones_1 values
+('John',6356),('Addison',4315),('kate',8003),('Ginny',9831);
+
+insert into calls_1 values
+(65,8003,9831,7),(100,9831,8003,3),(145,4315,9831,18);
+
+select * from phones_1;
+select * from calls_1;
+ ----------------------------------------------ALL CLIENT WHO  TALKED FOR AT LEAST 10 MINNUTES----------------------------------------------------
+
+with call_duration as (
+select caller as phone_number, sum(duration) as duration from calls_1 group by caller
+union all
+select callee as phone_number, sum(duration) as duration from calls_1 group by callee
+)
+SELECT name
+FROM phones_1 p join call_duration cd on cd.phone_number = p.phone_number
+GROUP BY name
+HAVING SUM(duration) >= 10
+ORDER BY name
